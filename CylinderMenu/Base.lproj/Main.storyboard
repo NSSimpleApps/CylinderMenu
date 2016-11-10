@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="iee-I5-brg">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Collection View Controller-->
+        <scene sceneID="NKj-aG-SqX">
+            <objects>
+                <collectionViewController id="iee-I5-brg" customClass="CollectionViewController" customModule="CylinderMenu" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" contentMode="scaleToFill" dataMode="prototypes" id="Pju-ab-vy7">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <collectionViewLayout key="collectionViewLayout" id="NV0-7z-IP3" customClass="CylinderFlowLayout" customModule="CylinderMenu" customModuleProvider="target"/>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" contentMode="center" reuseIdentifier="Cell" id="Wbz-go-Vpn">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="101" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Anf-1x-wrW">
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </view>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="Anf-1x-wrW" secondAttribute="centerX" id="b9m-Ee-RJO"/>
+                                    <constraint firstAttribute="centerY" secondItem="Anf-1x-wrW" secondAttribute="centerY" constant="0.5" id="xe5-We-TEl"/>
+                                </constraints>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="iee-I5-brg" id="Azu-83-ZXm"/>
+                            <outlet property="delegate" destination="iee-I5-brg" id="twO-u1-M25"/>
+                            <outletCollection property="gestureRecognizers" destination="kBG-s7-fLo" appends="YES" id="lFc-io-oBp"/>
+                            <outletCollection property="gestureRecognizers" destination="q26-VE-gLd" appends="YES" id="eW6-JV-XJA"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="l1U-zs-4QX"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yYM-4U-SX2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="kBG-s7-fLo">
+                    <connections>
+                        <action selector="handleTapGesture:" destination="iee-I5-brg" id="pTx-J8-ptH"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="q26-VE-gLd">
+                    <connections>
+                        <action selector="handlePanGesture:" destination="iee-I5-brg" id="w1w-WP-VAd"/>
+                    </connections>
+                </panGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="1974" y="400"/>
+        </scene>
+    </scenes>
+</document>
