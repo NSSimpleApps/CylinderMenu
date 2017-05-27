@@ -29,8 +29,6 @@ class CollectionViewController: UICollectionViewController {
 
     fileprivate var array = [1, 2, 3, 4, 5, 6]
     
-    fileprivate var radius: CGFloat = 0
-    
     fileprivate var initialPoint = CGPoint.zero
     
     override func viewDidLoad() {
@@ -40,54 +38,38 @@ class CollectionViewController: UICollectionViewController {
         let itemSize = (self.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
         let sizeOfCell = min(itemSize.width, itemSize.height)
         
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: sizeOfCell, height: sizeOfCell))
-        button.center = self.collectionView!.center
+        let button = UIButton(frame: .zero)
         button.backgroundColor = UIColor.lightGray
         button.clipsToBounds = true
         button.layer.cornerRadius = sizeOfCell / 2.0
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.borderWidth = 1.0
         button.addTarget(self,
-            action: #selector(CollectionViewController.showCells(_:)),
+            action: #selector(self.showCells(_:)),
             for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-        self.collectionView!.addSubview(button)
+        self.collectionView?.addSubview(button)
         
-        let horizontalConstraint = button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
-        let vertivalConstraint = button.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
-        
-        NSLayoutConstraint.activate([horizontalConstraint, vertivalConstraint])
-        
-        let size = self.collectionView!.frame.size
-        
-        self.radius = min(size.width, size.height) / 2.5
-        
-        if let collectionViewLayout = self.collectionView?.collectionViewLayout as? CylinderFlowLayout {
-            
-            collectionViewLayout.center = self.collectionView!.center
-            collectionViewLayout.radius = 0
-        }
+        button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        button.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        button.widthAnchor.constraint(equalToConstant: sizeOfCell).isActive = true
+        button.heightAnchor.constraint(equalToConstant: sizeOfCell).isActive = true
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     @IBAction func handleTapGesture(_ sender: UITapGestureRecognizer) {
         
         if let indexPath = self.collectionView?.indexPathForItem(at: sender.location(in: self.collectionView)) {
             
-            self.collectionView!.performBatchUpdates({ () -> Void in
+            self.collectionView?.performBatchUpdates({ () -> Void in
                 
-                self.array.remove(at: (indexPath as NSIndexPath).item)
+                self.array.remove(at: indexPath.item)
                 
                 self.collectionView?.deleteItems(at: [indexPath])
                 
                 }, completion: nil)
         } else {
             
-            self.collectionView!.performBatchUpdates({ () -> Void in
+            self.collectionView?.performBatchUpdates({ () -> Void in
                 
                 self.array.append(self.array.last ?? 0)
                 
@@ -95,7 +77,6 @@ class CollectionViewController: UICollectionViewController {
                 
                 }, completion: nil)
         }
-        
     }
     
     @IBAction func handlePanGesture(_ sender: UIPanGestureRecognizer) {
@@ -128,9 +109,10 @@ class CollectionViewController: UICollectionViewController {
                 
             } else if sender.state == .ended {
                 
-                let count = Int(collectionViewLayout.initialAngle/CGFloat(2*M_PI))
+                let count = Int(collectionViewLayout.initialAngle/(2*CGFloat.pi))
                 
-                collectionViewLayout.initialAngle -= CGFloat(count)*CGFloat(2*M_PI)
+                collectionViewLayout.initialAngle -=
+                    CGFloat(count) * (2*CGFloat.pi)
             }
         }
     }
@@ -157,7 +139,7 @@ class CollectionViewController: UICollectionViewController {
         
         if let label = cell.viewWithTag(101) as? UILabel {
             
-            label.text = String(self.array[(indexPath as NSIndexPath).item])
+            label.text = String(self.array[indexPath.item])
         }
         return cell
     }
@@ -167,8 +149,8 @@ class CollectionViewController: UICollectionViewController {
         if let collectionViewLayout = self.collectionView?.collectionViewLayout as? CylinderFlowLayout {
             
             self.collectionView?.performBatchUpdates({ () -> Void in
-                    
-                collectionViewLayout.radius = self.radius
+                
+                collectionViewLayout.showCells()
                 
                 }, completion:  { (finished: Bool) -> Void in
                     
@@ -176,7 +158,7 @@ class CollectionViewController: UICollectionViewController {
                         action: #function,
                         for: .touchUpInside)
                     sender.addTarget(self,
-                        action: #selector(CollectionViewController.hideCells(_:)),
+                        action: #selector(self.hideCells(_:)),
                         for: .touchUpInside)
             })
         }
@@ -188,7 +170,7 @@ class CollectionViewController: UICollectionViewController {
             
             self.collectionView?.performBatchUpdates({ () -> Void in
                 
-                collectionViewLayout.radius = 0
+                collectionViewLayout.hideCells()
                 
                 }, completion:  { (finished: Bool) -> Void in
                     
@@ -196,7 +178,7 @@ class CollectionViewController: UICollectionViewController {
                         action: #function,
                         for: .touchUpInside)
                     sender.addTarget(self,
-                        action: #selector(CollectionViewController.showCells(_:)),
+                        action: #selector(self.showCells(_:)),
                         for: .touchUpInside)
             })
         }
@@ -206,20 +188,9 @@ class CollectionViewController: UICollectionViewController {
         
         super.viewWillTransition(to: size, with: coordinator)
         
-        self.radius = min(size.width, size.height) / 2.5
-        
-        if let collectionViewLayout = self.collectionView?.collectionViewLayout as? CylinderFlowLayout {
+        DispatchQueue.main.async {
             
-            collectionViewLayout.center = CGPoint(x: size.width/2, y: size.height/2)
-            
-            if collectionViewLayout.radius > 0 {
-                
-                self.collectionView?.performBatchUpdates({ () -> Void in
-                    
-                    collectionViewLayout.radius = self.radius
-                    
-                    }, completion: nil)
-            }
+            self.collectionViewLayout.invalidateLayout()
         }
     }
 }

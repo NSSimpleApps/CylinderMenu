@@ -10,29 +10,51 @@ import UIKit
 
 class CylinderFlowLayout: UICollectionViewFlowLayout {
     
-    var center: CGPoint = CGPoint.zero
-    
-    var radius: CGFloat = 0.0
-    
     var numberOfCells: Int = 0
     
     var deleteIndexPaths: [IndexPath] = []
     var insertIndexPaths: [IndexPath] = []
     
-    var initialAngle = CGFloat(0)
+    var initialAngle: CGFloat = 0
+    
+    var center: CGPoint {
+        
+        let bounds = self.collectionView?.bounds.size ?? .zero
+        
+        return CGPoint(x: bounds.width/2, y: bounds.height/2)
+    }
+    
+    private var radius: CGFloat = 0
+    
+    private var maxRadius: CGFloat {
+        
+        let bounds = self.collectionView?.bounds.size ?? .zero
+        
+        return min(bounds.width, bounds.height) / 2.5
+    }
+    
+    func hideCells() {
+        
+        self.radius = 0
+    }
+    
+    func showCells() {
+        
+        self.radius = self.maxRadius
+    }
     
     override func prepare() {
         
         super.prepare()
         
-        self.numberOfCells = self.collectionView!.numberOfItems(inSection: 0)
+        self.numberOfCells = self.collectionView?.numberOfItems(inSection: 0) ?? 0
     }
     
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         
         super.prepare(forCollectionViewUpdates: updateItems)
         
-        for updateItem: UICollectionViewUpdateItem in updateItems {
+        for updateItem in updateItems {
             
             if updateItem.updateAction == .delete {
                 
@@ -55,7 +77,7 @@ class CylinderFlowLayout: UICollectionViewFlowLayout {
     
     override var collectionViewContentSize : CGSize {
         
-        return self.collectionView!.frame.size
+        return self.collectionView!.bounds.size
     }
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes {
@@ -63,48 +85,64 @@ class CylinderFlowLayout: UICollectionViewFlowLayout {
         let attribute = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         attribute.size = CGSize(width: 50, height: 50)
         
-        let angle = self.initialAngle + CGFloat(2 * M_PI)*CGFloat((indexPath as NSIndexPath).item) / CGFloat(self.numberOfCells)
-
+        let angle = self.initialAngle + 2 * CGFloat.pi*CGFloat(indexPath.item) / CGFloat(self.numberOfCells)
+        
         attribute.center = CGPoint(x: self.center.x + self.radius*cos(angle), y: self.center.y + self.radius*sin(angle))
+        
         return attribute
     }
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         
-        var attributes: [UICollectionViewLayoutAttributes] = []
-        
-        for i in 0 ..< self.numberOfCells {
+        if let layoutAttributes = super.layoutAttributesForElements(in: rect) {
             
-            let indexPath = IndexPath(item: i, section: 0)
+            return layoutAttributes.map({ (layoutAttribute) -> UICollectionViewLayoutAttributes in
+                
+                let indexPath = layoutAttribute.indexPath
+                
+                return self.layoutAttributesForItem(at: indexPath)
+            })
             
-            attributes.append(self.layoutAttributesForItem(at: indexPath))
+        } else {
+            
+            return nil
         }
-        return attributes
     }
     
     override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         
-        let attribute = self.layoutAttributesForItem(at: itemIndexPath)
-        
-        if self.insertIndexPaths.contains(itemIndexPath) {
+        if let initialLayoutAttributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath) {
             
-            attribute.alpha = 0.0
-            attribute.center = self.center
+            if self.insertIndexPaths.contains(itemIndexPath) {
+                
+                initialLayoutAttributes.alpha = 0.0
+                initialLayoutAttributes.center = self.center
+            }
+            
+            return initialLayoutAttributes
+            
+        } else {
+            
+            return nil
         }
-        
-        return attribute
     }
     
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         
-        let attribute = self.layoutAttributesForItem(at: itemIndexPath)
-        
-        if self.deleteIndexPaths.contains(itemIndexPath) {
+        if let finalLayoutAttributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath) {
             
-            attribute.alpha = 0.0
-            attribute.center = self.center
-            attribute.transform3D = CATransform3DMakeScale(0.1, 0.1, 1.0)
-        }
-        return attribute
+            if self.deleteIndexPaths.contains(itemIndexPath) {
+                
+                finalLayoutAttributes.alpha = 0.0
+                finalLayoutAttributes.center = self.center
+                finalLayoutAttributes.transform3D = CATransform3DMakeScale(0.1, 0.1, 1.0)
+            }
+            
+            return finalLayoutAttributes
+            
+        } else {
+            
+            return nil
+        }        
     }
 }
