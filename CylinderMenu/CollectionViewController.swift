@@ -144,7 +144,7 @@ class CollectionViewController: UICollectionViewController {
         return cell
     }
     
-    internal func showCells(_ sender: UIButton) {
+    @objc internal func showCells(_ sender: UIButton) {
         
         if let collectionViewLayout = self.collectionView?.collectionViewLayout as? CylinderFlowLayout {
             
@@ -164,7 +164,7 @@ class CollectionViewController: UICollectionViewController {
         }
     }
     
-    internal func hideCells(_ sender: UIButton) {
+    @objc internal func hideCells(_ sender: UIButton) {
         
         if let collectionViewLayout = self.collectionView?.collectionViewLayout as? CylinderFlowLayout {
             
