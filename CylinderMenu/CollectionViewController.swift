@@ -21,62 +21,117 @@ extension CGVector {
     }
 }
 
+class CollectionViewCell: UICollectionViewCell {
+    let label = UILabel()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.clipsToBounds = false
+        self.layer.masksToBounds = true
+        self.contentView.backgroundColor = UIColor.lightGray
+        self.layer.borderColor = UIColor.black.cgColor
+        self.layer.borderWidth = 1.0
+        
+        self.label.textAlignment = .center
+        self.label.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(self.label)
+        self.label.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true
+        self.label.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive = true
+        self.label.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
+        self.label.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class CollectionViewHeader: UICollectionReusableView {
+    let button = UIButton()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.backgroundColor = UIColor.lightGray
+        self.clipsToBounds = false
+        self.layer.masksToBounds = true
+        self.layer.borderColor = UIColor.black.cgColor
+        self.layer.borderWidth = 1.0
+        
+        self.button.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(self.button)
+        self.button.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+        self.button.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        self.button.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        self.button.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class CollectionViewController: UICollectionViewController {
-    private var array = [1, 2, 3, 4, 5, 6]
+    init(array: [Int]) {
+        self.array = array
+        
+        let layout = CylinderFlowLayout()
+        layout.itemSize = CGSize(width: 50, height: 50)
+        layout.headerReferenceSize = layout.itemSize
+        
+        super.init(collectionViewLayout: layout)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private var array: [Int]
     private var initialPoint = CGPoint.zero
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = .white
+        self.title = "CylinderMenu"
+        
         guard let collectionView = self.collectionView else { return }
         
-        let itemSize = (self.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
-        let sizeOfCell = min(itemSize.width, itemSize.height)
+        collectionView.isScrollEnabled = false
+        collectionView.backgroundColor = nil
+        collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "CollectionViewCell")
+        collectionView.register(CollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: "CollectionViewHeader")
         
-        let button = UIButton(type: .system)
-        button.backgroundColor = UIColor.lightGray
-        button.layer.cornerRadius = sizeOfCell / 2.0
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.borderWidth = 1.0
-        button.addTarget(self, action: #selector(self.showCells(_:)), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.addSubview(button)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self,
+                                                                 action: #selector(self.handleAddAction(_:)))
         
-        button.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor).isActive = true
-        button.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor).isActive = true
-        button.widthAnchor.constraint(equalToConstant: sizeOfCell).isActive = true
-        button.heightAnchor.constraint(equalToConstant: sizeOfCell).isActive = true
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanGesture(_:)))
+        collectionView.addGestureRecognizer(panGestureRecognizer)
     }
 
-    @IBAction func handleTapGesture(_ sender: UITapGestureRecognizer) {
-        if let indexPath = self.collectionView?.indexPathForItem(at: sender.location(in: self.collectionView)) {
-            self.collectionView?.performBatchUpdates({ () -> Void in
-                self.array.remove(at: indexPath.item)
-                self.collectionView?.deleteItems(at: [indexPath])
-                
-                }, completion: nil)
-        } else {
-            self.collectionView?.performBatchUpdates({ () -> Void in
-                self.array.append(self.array.last ?? 0)
-                self.collectionView?.insertItems(at: [IndexPath(item: self.array.count - 1, section: 0)])
-                
-                }, completion: nil)
-        }
+    @objc func handleAddAction(_ sender: UIBarButtonItem) {
+        guard let collectionView = self.collectionView else { return }
+        
+        collectionView.performBatchUpdates({ () -> Void in
+            self.array.append(self.array.count)
+            collectionView.insertItems(at: [IndexPath(item: self.array.count - 1, section: 0)])
+            
+            }, completion: nil)
     }
     
-    @IBAction func handlePanGesture(_ sender: UIPanGestureRecognizer) {
-        if let collectionViewLayout = self.collectionView?.collectionViewLayout as? CylinderFlowLayout {
-            
+    @objc func handlePanGesture(_ sender: UIPanGestureRecognizer) {
+        if let collectionViewLayout = self.collectionViewLayout as? CylinderFlowLayout {
             if sender.state == .began {
                 self.initialPoint = sender.location(in: sender.view)
                 
             } else if sender.state == .changed {
-                let center = sender.view?.center
-                let initialVector = CGVector(dx: self.initialPoint.x - center!.x, dy: self.initialPoint.y - center!.y)
+                let center = collectionViewLayout.center
+                let initialVector = CGVector(dx: self.initialPoint.x - center.x, dy: self.initialPoint.y - center.y)
                 let currentPoint = sender.location(in: sender.view)
-                let currentVector = CGVector(dx: currentPoint.x - center!.x, dy: currentPoint.y - center!.y)
+                let currentVector = CGVector(dx: currentPoint.x - center.x, dy: currentPoint.y - center.y)
                 let angle = initialVector.angle(currentVector)
-                
                 self.initialPoint = currentPoint
                     
                 self.collectionView?.performBatchUpdates({ () -> Void in
@@ -87,12 +142,10 @@ class CollectionViewController: UICollectionViewController {
             } else if sender.state == .ended {
                 let count = Int(collectionViewLayout.initialAngle/(2*CGFloat.pi))
                 
-                collectionViewLayout.initialAngle -=
-                    CGFloat(count) * (2*CGFloat.pi)
+                collectionViewLayout.initialAngle -= CGFloat(count) * (2*CGFloat.pi)
             }
         }
     }
-    // MARK: UICollectionViewDataSource
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -103,38 +156,64 @@ class CollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-    
-        cell.backgroundColor = UIColor.lightGray
-        cell.layer.cornerRadius = min(cell.bounds.width, cell.bounds.height) / 2.0
-        cell.layer.borderColor = UIColor.black.cgColor
-        cell.layer.borderWidth = 1.0
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! CollectionViewCell
+        let size = (collectionView.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
+        cell.layer.cornerRadius = min(size.width, size.height) / 2.0
+        cell.label.text = String(self.array[indexPath.item])
         
-        if let label = cell.viewWithTag(101) as? UILabel {
-            label.text = String(self.array[indexPath.item])
-        }
         return cell
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.performBatchUpdates({ () -> Void in
+            self.array.remove(at: indexPath.item)
+            collectionView.deleteItems(at: [indexPath])
+            
+            }, completion: nil)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let cylinderFlowLayout = collectionView.collectionViewLayout as! CylinderFlowLayout
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CollectionViewHeader", for: indexPath) as! CollectionViewHeader
+        let size = cylinderFlowLayout.headerReferenceSize
+        header.layer.cornerRadius = min(size.width, size.height) / 2.0
+        let button = header.button
+        button.removeTarget(nil, action: nil, for: .allEvents)
+        
+        if cylinderFlowLayout.radius > 0 {
+            button.addTarget(self, action: #selector(self.hideCells(_:)), for: .touchUpInside)
+        } else {
+            button.addTarget(self, action: #selector(self.showCells(_:)), for: .touchUpInside)
+        }
+        
+        return header
+    }
+    
     @objc func showCells(_ sender: UIButton) {
-        if let collectionViewLayout = self.collectionView?.collectionViewLayout as? CylinderFlowLayout {
-            self.collectionView?.performBatchUpdates({ () -> Void in
+        guard let collectionView = self.collectionView else { return }
+        
+        sender.removeTarget(self, action: #function, for: .touchUpInside)
+        
+        if let collectionViewLayout = collectionView.collectionViewLayout as? CylinderFlowLayout {
+            collectionView.performBatchUpdates({ () -> Void in
                 collectionViewLayout.showCells()
                 
                 }, completion:  { (finished: Bool) -> Void in
-                    sender.removeTarget(self, action: #function, for: .touchUpInside)
                     sender.addTarget(self, action: #selector(self.hideCells(_:)), for: .touchUpInside)
             })
         }
     }
     
     @objc func hideCells(_ sender: UIButton) {
-        if let collectionViewLayout = self.collectionView?.collectionViewLayout as? CylinderFlowLayout {
-            self.collectionView?.performBatchUpdates({ () -> Void in
+        guard let collectionView = self.collectionView else { return }
+        
+        sender.removeTarget(self, action: #function, for: .touchUpInside)
+        
+        if let collectionViewLayout = collectionView.collectionViewLayout as? CylinderFlowLayout {
+            collectionView.performBatchUpdates({ () -> Void in
                 collectionViewLayout.hideCells()
                 
                 }, completion:  { (finished: Bool) -> Void in
-                    sender.removeTarget(self, action: #function, for: .touchUpInside)
                     sender.addTarget(self, action: #selector(self.showCells(_:)), for: .touchUpInside)
             })
         }
@@ -143,8 +222,8 @@ class CollectionViewController: UICollectionViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
-        DispatchQueue.main.async {
+        coordinator.animate(alongsideTransition: { _ in
             self.collectionViewLayout.invalidateLayout()
-        }
+        }, completion: nil)
     }
 }

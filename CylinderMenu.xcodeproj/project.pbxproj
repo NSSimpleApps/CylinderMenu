@@ -10,9 +10,8 @@
 		B56268861AEA9AEB00B29866 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56268851AEA9AEB00B29866 /* CollectionViewController.swift */; };
 		B562688A1AEA9B8200B29866 /* CylinderFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56268891AEA9B8200B29866 /* CylinderFlowLayout.swift */; };
 		B5D1FB801AE95EAD0070F9FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D1FB7F1AE95EAD0070F9FC /* AppDelegate.swift */; };
-		B5D1FB851AE95EAD0070F9FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5D1FB831AE95EAD0070F9FC /* Main.storyboard */; };
 		B5D1FB871AE95EAD0070F9FC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5D1FB861AE95EAD0070F9FC /* Images.xcassets */; };
-		B5D1FB8A1AE95EAD0070F9FC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5D1FB881AE95EAD0070F9FC /* LaunchScreen.xib */; };
+		CEF03D622729E6D400993697 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEF03D612729E6D400993697 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,9 +21,8 @@
 		B5D1FB7A1AE95EAD0070F9FC /* CylinderMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CylinderMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5D1FB7E1AE95EAD0070F9FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5D1FB7F1AE95EAD0070F9FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B5D1FB841AE95EAD0070F9FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B5D1FB861AE95EAD0070F9FC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		B5D1FB891AE95EAD0070F9FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		CEF03D612729E6D400993697 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,10 +59,9 @@
 				B56268851AEA9AEB00B29866 /* CollectionViewController.swift */,
 				B56268891AEA9B8200B29866 /* CylinderFlowLayout.swift */,
 				B5BE38CC1B6CEAE8005C414B /* CylinderMenu.gif */,
-				B5D1FB831AE95EAD0070F9FC /* Main.storyboard */,
 				B5D1FB861AE95EAD0070F9FC /* Images.xcassets */,
-				B5D1FB881AE95EAD0070F9FC /* LaunchScreen.xib */,
 				B5D1FB7D1AE95EAD0070F9FC /* Supporting Files */,
+				CEF03D612729E6D400993697 /* LaunchScreen.storyboard */,
 			);
 			path = CylinderMenu;
 			sourceTree = "<group>";
@@ -105,7 +102,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1310;
 				ORGANIZATIONNAME = NSSimpleApps;
 				TargetAttributes = {
 					B5D1FB791AE95EAD0070F9FC = {
@@ -137,8 +134,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B5D1FB851AE95EAD0070F9FC /* Main.storyboard in Resources */,
-				B5D1FB8A1AE95EAD0070F9FC /* LaunchScreen.xib in Resources */,
+				CEF03D622729E6D400993697 /* LaunchScreen.storyboard in Resources */,
 				B5D1FB871AE95EAD0070F9FC /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -157,25 +153,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		B5D1FB831AE95EAD0070F9FC /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B5D1FB841AE95EAD0070F9FC /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		B5D1FB881AE95EAD0070F9FC /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B5D1FB891AE95EAD0070F9FC /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		B5D1FB971AE95EAE0070F9FC /* Debug */ = {
@@ -201,6 +178,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -226,7 +204,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -259,6 +237,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -277,7 +256,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
