@@ -192,14 +192,16 @@ class CollectionViewController: UICollectionViewController {
     @objc func showCells(_ sender: UIButton) {
         guard let collectionView = self.collectionView else { return }
         
-        sender.removeTarget(self, action: #function, for: .touchUpInside)
+        sender.removeTarget(nil, action: nil, for: .allEvents)
+        sender.addTarget(self, action: #selector(self.hideCells(_:)), for: .touchUpInside)
+        sender.isEnabled = false
         
         if let collectionViewLayout = collectionView.collectionViewLayout as? CylinderFlowLayout {
             collectionView.performBatchUpdates({ () -> Void in
                 collectionViewLayout.showCells()
                 
                 }, completion:  { (finished: Bool) -> Void in
-                    sender.addTarget(self, action: #selector(self.hideCells(_:)), for: .touchUpInside)
+                    sender.isEnabled = true
             })
         }
     }
@@ -207,14 +209,16 @@ class CollectionViewController: UICollectionViewController {
     @objc func hideCells(_ sender: UIButton) {
         guard let collectionView = self.collectionView else { return }
         
-        sender.removeTarget(self, action: #function, for: .touchUpInside)
+        sender.removeTarget(nil, action: nil, for: .allEvents)
+        sender.addTarget(self, action: #selector(self.showCells(_:)), for: .touchUpInside)
+        sender.isEnabled = false
         
         if let collectionViewLayout = collectionView.collectionViewLayout as? CylinderFlowLayout {
             collectionView.performBatchUpdates({ () -> Void in
                 collectionViewLayout.hideCells()
                 
                 }, completion:  { (finished: Bool) -> Void in
-                    sender.addTarget(self, action: #selector(self.showCells(_:)), for: .touchUpInside)
+                    sender.isEnabled = true
             })
         }
     }

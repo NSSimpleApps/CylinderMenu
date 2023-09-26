@@ -63,6 +63,7 @@ class CylinderFlowLayout: UICollectionViewFlowLayout {
         let angle = self.initialAngle + 2 * CGFloat.pi*CGFloat(indexPath.item) / CGFloat(numberOfCells)
         
         let attribute = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+        attribute.zIndex = -100
         attribute.size = self.itemSize
         attribute.center = CGPoint(x: center.x + self.radius*cos(angle), y: center.y + self.radius * sin(angle))
         
@@ -71,6 +72,7 @@ class CylinderFlowLayout: UICollectionViewFlowLayout {
     
     override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         let attribute = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: indexPath)
+        attribute.zIndex = 100
         attribute.size = self.headerReferenceSize
         attribute.center = self.center
         
@@ -88,7 +90,7 @@ class CylinderFlowLayout: UICollectionViewFlowLayout {
                 } else if representedElementCategory == .supplementaryView {
                     return self.layoutAttributesForSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, at: indexPath)
                 } else {
-                    return nil
+                    return layoutAttribute
                 }
             })
         } else {
