@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -113,7 +113,6 @@
 				};
 			};
 			buildConfigurationList = B5D1FB751AE95EAD0070F9FC /* Build configuration list for PBXProject "CylinderMenu" */;
-			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -121,6 +120,7 @@
 				Base,
 			);
 			mainGroup = B5D1FB711AE95EAD0070F9FC;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = B5D1FB7B1AE95EAD0070F9FC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -213,6 +213,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -267,6 +268,7 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -283,7 +285,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "NSSimpleApps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -298,7 +299,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "NSSimpleApps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
